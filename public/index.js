@@ -13,7 +13,7 @@ const send = (todo) => {
    return new Promise((resolve, reject) => {
       fetch("/todo/add", {
          method: 'POST',
-         header: {
+         headers: {
             "Content-Type": "application/json"
          },
          body: JSON.stringify(todo)
@@ -24,15 +24,27 @@ const send = (todo) => {
    })
 }
 
+const load = () => {
+   return new Promise((resolve, reject) => {
+      fetch("/todo").then((response) => response.json)
+      .then((json) => {
+         resolve(json);
+      })
+   })
+}
+
 insertButton.onclick = () => {
    const todo = {      
-      id: "" + new Date().getTime(),
+      //id: "" + new Date().getTime(), -> togliamo il codice che crea l'ID. Sarà il server a crearlo.
       name: todoInput.value,
       completed: false
    }
    todos.push(todo);
    render();
-   //send({todo: todo});
+   send({todo: todo}).then(load).then((json) => {
+      todos = json.todos;
+      render();
+   });
 }
 
 const render = () => {
