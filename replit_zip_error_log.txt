@@ -1,0 +1,5 @@
+{"error":".zip archives do not support non-regular files","level":"error","msg":"unable to write file .cache/replit/modules/nodejs-20:v23-20240116-9f73277","time":"2024-01-22T07:22:41Z"}
+{"error":".zip archives do not support non-regular files","level":"error","msg":"unable to write file node_modules/.bin/mime","time":"2024-01-22T07:22:42Z"}
+{"error":".zip archives do not support non-regular files","level":"error","msg":"unable to write file node_modules/.bin/watchr","time":"2024-01-22T07:22:42Z"}
+{"error":".zip archives do not support non-regular files","level":"error","msg":"unable to write file node_modules/express-livereload/node_modules/.bin/livereload","time":"2024-01-22T07:22:42Z"}
+{"error":".zip archives do not support non-regular files","level":"error","msg":"unable to write file node_modules/websocket.io/node_modules/.bin/wscat","time":"2024-01-22T07:22:43Z"}
