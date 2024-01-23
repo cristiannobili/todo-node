@@ -3,6 +3,8 @@ const http = require('http');
 const path = require('path');
 const app = express();
 const bodyParser = require('body-parser');
+const { sign } = require("crypto");
+const { allowedNodeEnvironmentFlags } = require("process");
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
    extended: true
@@ -15,9 +17,8 @@ app.use("/", express.static(path.join(__dirname, "public")));
 app.post("/todo/add", (req, res) => {
    const data = req.body;
    console.log(data);
-   const id = "" + new Date().getTime();
    const todo = req.body.todo;
-   todo.id = id;
+   todo.id = "" + new Date().getTime();;
    todos.push(todo);
    res.json({result: "Ok"});
 });
@@ -30,3 +31,4 @@ const server = http.createServer(app);
 server.listen(80, () => {
   console.log("- server running");
 });
+
