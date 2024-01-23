@@ -26,7 +26,8 @@ const send = (todo) => {
 
 const load = () => {
    return new Promise((resolve, reject) => {
-      fetch("/todo").then((response) => response.json)
+      fetch("/todo")
+      .then((response) => response.json())
       .then((json) => {
          resolve(json);
       })
@@ -34,14 +35,13 @@ const load = () => {
 }
 
 insertButton.onclick = () => {
-   const todo = {      
-      //id: "" + new Date().getTime(), -> togliamo il codice che crea l'ID. Sarà il server a crearlo.
+   const todo = {          
       name: todoInput.value,
       completed: false
-   }
-   todos.push(todo);
-   render();
-   send({todo: todo}).then(load).then((json) => {
+   }      
+   send({todo: todo}).then(
+      () => load()
+   ).then((json) => {
       todos = json.todos;
       render();
    });
