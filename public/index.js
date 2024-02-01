@@ -17,7 +17,23 @@ const send = (todo) => {
             "Content-Type": "application/json"
          },
          body: JSON.stringify(todo)
-      }).then((response) => response.json)
+      }).then((response) => response.json())
+      .then((json) => {
+         resolve(json);
+      })
+   })
+}
+
+const completeTodo = (todo) => {
+   return new Promise((resolve, reject) => {
+      fetch("/todo/complete", {
+         method: 'PUT',
+         headers: {
+            "Content-Type": "application/json"
+         },
+         body: JSON.stringify(todo)
+      })
+      .then((response) => response.json())
       .then((json) => {
          resolve(json);
       })
@@ -34,15 +50,33 @@ const load = () => {
    })
 }
 
+const deleteTodo = (id) => {
+   return new Promise((resolve, reject) => {
+      fetch("/todo/"+id, {
+         method: 'DELETE',
+         headers: {
+            "Content-Type": "application/json"
+         },
+      })
+      .then((response) => response.json())
+      .then((json) => {
+         resolve(json);
+      })
+   })
+}
+
 insertButton.onclick = () => {
    const todo = {          
       name: todoInput.value,
       completed: false
-   }      
-   send({todo: todo}).then(
-      () => load()
-   ).then((json) => {
+   }   
+   todos.push(todo);
+   render();   
+   send({todo: todo})
+   .then(() => load())
+   .then((json) => {
       todos = json.todos;
+      todoInput.value = "";
       render();
    });
 }
@@ -61,23 +95,40 @@ const render = () => {
          button.onclick = () => {
             if (button.id.indexOf("delete_") != -1) {
                const id = button.id.replace("delete_", "");
-               todos = todos.filter((todo) => todo.id !== id);
+               deleteTodo(id)
+               .then(
+                  () => load()
+               ).then((json) => {
+                  todos = json.todos;
+                  render();
+               });                                             
             } 
             if (button.id.indexOf("success_") != -1) {
                const id = button.id.replace("success_", "");
-               todos = todos.map((todo) => {
-                  if (todo.id === id) {
-                     todo.completed = !todo.completed;
-                  }
-                  return todo;
-               })
+               const todo = todos.filter((element) => element.id === id)[0];
+               completeTodo(todo)
+               .then(
+                  () => load()
+               ).then((json) => {
+                  todos = json.todos;
+                  render();
+               }); 
             }
             render();
          }
    })
 }
 
-render();
+const refresh = () => {
+   load().then((json) => {
+      todos = json.todos;
+      render();
+   });
+}
+
+refresh();
+setInterval(refresh, 30000);
+
 
 
 
